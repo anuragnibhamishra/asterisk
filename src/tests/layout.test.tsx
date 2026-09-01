@@ -1,14 +1,26 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Layout } from '../components/Layout';
+
+const mockUseAuth = vi.fn();
+
+vi.mock('@/contexts/AuthContext', () => ({
+  useAuth: () => mockUseAuth(),
+}));
 
 describe('Layout mobile navigation', () => {
   it('shows a menu toggle and reveals the mobile navigation when clicked', () => {
+    mockUseAuth.mockReturnValue({
+      session: { user: { id: '1', email: 'test@example.com' } },
+      loading: false,
+      signOut: vi.fn(),
+    });
+
     render(
       <MemoryRouter>
         <Layout />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const toggleButton = screen.getByRole('button', { name: /toggle navigation/i });

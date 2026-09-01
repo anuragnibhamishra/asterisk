@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from './Button';
 
 const NAV_ITEMS = [
   { to: '/', label: 'Home', end: true },
@@ -10,7 +12,10 @@ const NAV_ITEMS = [
 ] as const;
 
 export function Layout() {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
 
   const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
     [
@@ -19,6 +24,13 @@ export function Layout() {
         ? 'bg-primary/15 text-primary'
         : 'text-text-muted hover:bg-surface-raised hover:text-text',
     ].join(' ');
+
+  const handleSignOut = async () => {
+    setSigningOut(true);
+    await signOut();
+    navigate('/login', { replace: true });
+    setSigningOut(false);
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -40,7 +52,7 @@ export function Layout() {
             className="inline-flex items-center justify-center rounded-md border border-surface-border bg-surface-raised p-2 text-text-muted transition-colors hover:text-text sm:hidden"
           >
             <span className="sr-only">Toggle navigation</span>
-            <span className="flex flex-col items-center gap-1 w-6 h-6 justify-center">
+            <span className="flex h-6 w-6 flex-col items-center justify-center gap-1">
               <span className="block h-[1.6px] w-5 rounded-full bg-current" />
               <span className="block h-[1.6px] w-5 rounded-full bg-current" />
               <span className="block h-[1.6px] w-5 rounded-full bg-current" />
@@ -56,26 +68,61 @@ export function Layout() {
                   </NavLink>
                 </li>
               ))}
+              <li className="ml-2 border-l border-surface-border pl-2">
+                <div className="flex items-center gap-3">
+                  {user?.email && (
+                    <span className="max-w-[160px] truncate text-xs text-text-muted" title={user.email}>
+                      {user.email}
+                    </span>
+                  )}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="px-3 py-2 text-sm"
+                    disabled={signingOut}
+                    onClick={handleSignOut}
+                  >
+                    {signingOut ? 'Signing out...' : 'Sign out'}
+                  </Button>
+                </div>
+              </li>
             </ul>
           </nav>
         </div>
 
         {isMenuOpen && (
-          <div className=" sm:hidden">
+          <div className="sm:hidden">
             <nav aria-label="Mobile navigation">
-              <ul className="flex flex-col bg-surface/95 w-full absolute left-0 top-18 px-6 items-end gap-2">
+              <ul className="absolute left-0 top-18 flex w-full flex-col items-end gap-2 bg-surface/95 px-6">
                 {NAV_ITEMS.map(({ to, label, end }) => (
                   <li key={to}>
                     <NavLink
                       to={to}
                       end={end}
                       onClick={() => setIsMenuOpen(false)}
-                      className="font-medium w-full text-sm text-text-muted"
+                      className="w-full text-sm font-medium text-text-muted"
                     >
                       {label}
                     </NavLink>
                   </li>
                 ))}
+                <li className="w-full border-t border-surface-border pt-2">
+                  {user?.email && (
+                    <p className="mb-2 truncate text-right text-xs text-text-muted">{user.email}</p>
+                  )}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="w-full justify-end px-0 py-2 text-sm"
+                    disabled={signingOut}
+                    onClick={async () => {
+                      setIsMenuOpen(false);
+                      await handleSignOut();
+                    }}
+                  >
+                    {signingOut ? 'Signing out...' : 'Sign out'}
+                  </Button>
+                </li>
               </ul>
             </nav>
           </div>
