@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 
 interface AuthShellProps {
   title: string;
@@ -9,17 +8,10 @@ interface AuthShellProps {
 
 export function AuthShell({ title, subtitle, children, footer }: AuthShellProps) {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-surface px-4 text-text">
+    <main className="flex min-h-screen items-center justify-center bg-transparent min-w-screen px-4 text-text">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <Link
-            to="/login"
-            className="inline-block text-3xl font-bold tracking-tight transition-colors hover:text-primary"
-          >
-            Asterisk<span className="text-primary">*</span>
-          </Link>
-
-          <h1 className="mt-8 text-2xl font-semibold">{title}</h1>
+          <h1 className="text-2xl font-semibold">{title}</h1>
           <p className="mt-2 text-sm text-text-muted">{subtitle}</p>
         </div>
 

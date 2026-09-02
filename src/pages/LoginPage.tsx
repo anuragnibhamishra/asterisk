@@ -10,7 +10,7 @@ import {
   authLabelClassName,
   authSubmitClassName,
 } from '@/components/AuthShell';
-
+import { AuthLeft } from '@/components/AuthLeft';
 export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -56,69 +56,74 @@ export function LoginPage() {
   };
 
   return (
-    <AuthShell
-      title="Welcome back"
-      subtitle="Sign in to continue to Asterisk"
-      footer={
-        <p className="text-sm text-text-muted">
-          Don&apos;t have an account?{' '}
-          <Link to="/signup" className="font-medium text-text transition-colors hover:text-primary">
-            Create account
-          </Link>
-        </p>
-      }
-    >
-      <GoogleAuthButton onClick={handleGoogleLogin} />
+    <div className='w-screen min-h-screen bg-surface flex'>
+      <AuthLeft />
+      <div className='w-full lg:w-1/2 flex items-center justify-center h-full'>
+        <AuthShell
+          title="Welcome back"
+          subtitle="Sign in to continue to Asterisk"
+          footer={
+            <p className="text-sm text-text-muted">
+              Don&apos;t have an account?{' '}
+              <Link to="/signup" className="font-medium text-text transition-colors hover:text-primary">
+                Create account
+              </Link>
+            </p>
+          }
+        >
+          <GoogleAuthButton onClick={handleGoogleLogin} />
 
-      <AuthDivider />
+          <AuthDivider />
 
-      {error && <AuthMessage type="error" message={error} />}
+          {error && <AuthMessage type="error" message={error} />}
 
-      <form onSubmit={handleLogin} className="space-y-5">
-        <div>
-          <label htmlFor="email" className={authLabelClassName}>
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            required
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            className={authInputClassName}
-          />
-        </div>
+          <form onSubmit={handleLogin} className="space-y-5">
+            <div>
+              <label htmlFor="email" className={authLabelClassName}>
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                required
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className={authInputClassName}
+              />
+            </div>
 
-        <div>
-          <div className="mb-2 flex items-center justify-between">
-            <label htmlFor="password" className="text-sm font-medium text-text">
-              Password
-            </label>
-            <Link
-              to="/forgot-password"
-              className="text-xs text-text-muted transition-colors hover:text-primary"
-            >
-              Forgot password?
-            </Link>
-          </div>
-          <input
-            id="password"
-            type="password"
-            required
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-            className={authInputClassName}
-          />
-        </div>
+            <div>
+              <div className="mb-2 flex items-center justify-between">
+                <label htmlFor="password" className="text-sm font-medium text-text">
+                  Password
+                </label>
+                <Link
+                  to="/forgot-password"
+                  className="text-xs text-text-muted transition-colors hover:text-primary"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+              <input
+                id="password"
+                type="password"
+                required
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className={authInputClassName}
+              />
+            </div>
 
-        <button type="submit" disabled={loading} className={authSubmitClassName}>
-          {loading ? 'Signing in...' : 'Sign in'}
-        </button>
-      </form>
-    </AuthShell>
+            <button type="submit" disabled={loading} className={authSubmitClassName}>
+              {loading ? 'Signing in...' : 'Sign in'}
+            </button>
+          </form>
+        </AuthShell>
+      </div>
+    </div>
   );
 }

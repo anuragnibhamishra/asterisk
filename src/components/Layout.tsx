@@ -68,13 +68,8 @@ export function Layout() {
                   </NavLink>
                 </li>
               ))}
-              <li className="ml-2 border-l border-surface-border pl-2">
+              <li className="">
                 <div className="flex items-center gap-3">
-                  {user?.email && (
-                    <span className="max-w-[160px] truncate text-xs text-text-muted" title={user.email}>
-                      {user.email}
-                    </span>
-                  )}
                   <Button
                     type="button"
                     variant="ghost"
@@ -106,10 +101,8 @@ export function Layout() {
                     </NavLink>
                   </li>
                 ))}
-                <li className="w-full border-t border-surface-border pt-2">
-                  {user?.email && (
-                    <p className="mb-2 truncate text-right text-xs text-text-muted">{user.email}</p>
-                  )}
+                <li className="">
+                  
                   <Button
                     type="button"
                     variant="ghost"

@@ -8,6 +8,7 @@ import {
   authLabelClassName,
   authSubmitClassName,
 } from '@/components/AuthShell';
+import { AuthLeft } from '@/components/AuthLeft';
 
 export function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -36,39 +37,44 @@ export function ForgotPasswordPage() {
   };
 
   return (
-    <AuthShell
-      title="Reset your password"
-      subtitle="Enter your email and we will send you a reset link"
-      footer={
-        <Link to="/login" className="text-sm text-text-muted transition-colors hover:text-primary">
-          ← Back to sign in
-        </Link>
-      }
-    >
-      {error && <AuthMessage type="error" message={error} />}
-      {success && <AuthMessage type="success" message={success} />}
+    <div className='w-screen min-h-screen bg-surface flex'>
+      <AuthLeft />
+      <div className='w-full lg:w-1/2 flex items-center justify-center h-full'>
+        <AuthShell
+          title="Reset your password"
+          subtitle="Enter your email and we will send you a reset link"
+          footer={
+            <Link to="/login" className="text-sm text-text-muted transition-colors hover:text-primary">
+              ← Back to sign in
+            </Link>
+          }
+        >
+          {error && <AuthMessage type="error" message={error} />}
+          {success && <AuthMessage type="success" message={success} />}
 
-      <form onSubmit={handleReset} className="space-y-5">
-        <div>
-          <label htmlFor="reset-email" className={authLabelClassName}>
-            Email
-          </label>
-          <input
-            id="reset-email"
-            type="email"
-            required
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            className={authInputClassName}
-          />
-        </div>
+          <form onSubmit={handleReset} className="space-y-5">
+            <div>
+              <label htmlFor="reset-email" className={authLabelClassName}>
+                Email
+              </label>
+              <input
+                id="reset-email"
+                type="email"
+                required
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className={authInputClassName}
+              />
+            </div>
 
-        <button type="submit" disabled={loading} className={authSubmitClassName}>
-          {loading ? 'Sending link...' : 'Send reset link'}
-        </button>
-      </form>
-    </AuthShell>
+            <button type="submit" disabled={loading} className={authSubmitClassName}>
+              {loading ? 'Sending link...' : 'Send reset link'}
+            </button>
+          </form>
+        </AuthShell>
+      </div>
+    </div>
   );
 }

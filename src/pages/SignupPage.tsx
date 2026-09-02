@@ -10,6 +10,7 @@ import {
   authLabelClassName,
   authSubmitClassName,
 } from '@/components/AuthShell';
+import { AuthLeft } from '@/components/AuthLeft';
 
 export function SignupPage() {
   const navigate = useNavigate();
@@ -75,80 +76,85 @@ export function SignupPage() {
   };
 
   return (
-    <AuthShell
-      title="Create your account"
-      subtitle="Sign up to start using Asterisk"
-      footer={
-        <p className="text-sm text-text-muted">
-          Already have an account?{' '}
-          <Link to="/login" className="font-medium text-text transition-colors hover:text-primary">
-            Sign in
-          </Link>
-        </p>
-      }
-    >
-      <GoogleAuthButton onClick={handleGoogleSignup} label="Sign up with Google" />
+    <div className='w-screen min-h-screen bg-surface flex'>
+      <AuthLeft />
+      <div className='w-full lg:w-1/2 flex items-center justify-center h-full'>
+        <AuthShell
+          title="Create your account"
+          subtitle="Sign up to start using Asterisk"
+          footer={
+            <p className="text-sm text-text-muted">
+              Already have an account?{' '}
+              <Link to="/login" className="font-medium text-text transition-colors hover:text-primary">
+                Sign in
+              </Link>
+            </p>
+          }
+        >
+          <GoogleAuthButton onClick={handleGoogleSignup} label="Sign up with Google" />
 
-      <AuthDivider />
+          <AuthDivider />
 
-      {error && <AuthMessage type="error" message={error} />}
-      {success && <AuthMessage type="success" message={success} />}
+          {error && <AuthMessage type="error" message={error} />}
+          {success && <AuthMessage type="success" message={success} />}
 
-      <form onSubmit={handleSignup} className="space-y-5">
-        <div>
-          <label htmlFor="signup-email" className={authLabelClassName}>
-            Email
-          </label>
-          <input
-            id="signup-email"
-            type="email"
-            required
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            className={authInputClassName}
-          />
-        </div>
+          <form onSubmit={handleSignup} className="space-y-5">
+            <div>
+              <label htmlFor="signup-email" className={authLabelClassName}>
+                Email
+              </label>
+              <input
+                id="signup-email"
+                type="email"
+                required
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className={authInputClassName}
+              />
+            </div>
 
-        <div>
-          <label htmlFor="signup-password" className={authLabelClassName}>
-            Password
-          </label>
-          <input
-            id="signup-password"
-            type="password"
-            required
-            minLength={6}
-            autoComplete="new-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="At least 6 characters"
-            className={authInputClassName}
-          />
-        </div>
+            <div>
+              <label htmlFor="signup-password" className={authLabelClassName}>
+                Password
+              </label>
+              <input
+                id="signup-password"
+                type="password"
+                required
+                minLength={6}
+                autoComplete="new-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="At least 6 characters"
+                className={authInputClassName}
+              />
+            </div>
 
-        <div>
-          <label htmlFor="confirm-password" className={authLabelClassName}>
-            Confirm password
-          </label>
-          <input
-            id="confirm-password"
-            type="password"
-            required
-            minLength={6}
-            autoComplete="new-password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Repeat your password"
-            className={authInputClassName}
-          />
-        </div>
+            <div>
+              <label htmlFor="confirm-password" className={authLabelClassName}>
+                Confirm password
+              </label>
+              <input
+                id="confirm-password"
+                type="password"
+                required
+                minLength={6}
+                autoComplete="new-password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Repeat your password"
+                className={authInputClassName}
+              />
+            </div>
 
-        <button type="submit" disabled={loading} className={authSubmitClassName}>
-          {loading ? 'Creating account...' : 'Create account'}
-        </button>
-      </form>
-    </AuthShell>
+            <button type="submit" disabled={loading} className={authSubmitClassName}>
+              {loading ? 'Creating account...' : 'Create account'}
+            </button>
+          </form>
+        </AuthShell>
+      </div>
+    </div>
   );
 }
