@@ -1,26 +1,32 @@
 import { useState } from 'react';
+import type { ParsedProblem } from '../types';
 import { parseNaturalLanguage } from '../utils/naturalLanguage';
 import { Button } from './Button';
 import { Card } from './Card';
 
-/**
- * Foundation UI for future NLP/LLM integration.
- * Does not perform parsing in V1 — delegates to a stub interface.
- */
-export function NaturalLanguagePanel() {
+interface NaturalLanguagePanelProps {
+  onParsed: (problem: ParsedProblem) => void;
+}
+
+export function NaturalLanguagePanel({ onParsed }: NaturalLanguagePanelProps) {
   const [text, setText] = useState('');
   const [feedback, setFeedback] = useState<string | null>(null);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const response = parseNaturalLanguage({ text });
-    setFeedback(response.message);
+    if (response.type === 'unknown') {
+      setFeedback('I could not identify a supported permutation, combination, or factorial problem.');
+      return;
+    }
+    onParsed(response);
+    setFeedback(`Parsed as ${response.operation}: n = ${response.n}${response.r === undefined ? '' : `, r = ${response.r}`}`);
   }
 
   return (
     <Card
       title="Natural language input"
-      description="Describe a problem in plain English. Structured parsing will be available in a future release."
+      description="Describe a permutation, combination, or factorial problem in plain English."
       className="border-dashed border-surface-border/80"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -41,7 +47,7 @@ export function NaturalLanguagePanel() {
             aria-describedby="nl-input-note"
           />
           <p id="nl-input-note" className="mt-1.5 text-xs text-text-muted">
-            Coming soon — input is saved locally only and not sent anywhere.
+            Your input is parsed locally and sent to the existing solver.
           </p>
         </div>
 

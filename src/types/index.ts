@@ -90,7 +90,11 @@ export interface NaturalLanguageInput {
   text: string;
 }
 
-export interface ParsedProblemPlaceholder {
-  status: 'not-implemented';
-  message: string;
-}
+export type ParsedProblem = {
+  type: 'permutation' | 'combination' | 'factorial' | 'unknown';
+  n?: number;
+  r?: number;
+  operation?: 'nPr' | 'nCr' | 'factorial';
+  originalInput: string;
+  confidence?: number;
+};

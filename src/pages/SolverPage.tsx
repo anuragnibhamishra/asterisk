@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import type { ProblemType, SolverResponse } from '../types';
+import type { ParsedProblem, ProblemType, SolverResponse } from '../types';
 import { isSolverError } from '../types';
 import { solve } from '../math';
 import { PROBLEM_TYPES, getProblemTypeConfig } from '../utils/problemTypes';
@@ -30,6 +30,22 @@ export function SolverPage() {
     setValues((prev) => ({ ...prev, [name]: value }));
     setResult(null);
   }, []);
+
+  const handleNaturalLanguage = useCallback((parsed: ParsedProblem) => {
+    if (parsed.type === 'unknown' || parsed.n === undefined) return;
+    const nextType = parsed.type as ProblemType;
+    const nextValues = {
+      n: String(parsed.n),
+      ...(parsed.r === undefined ? {} : { r: String(parsed.r) }),
+    };
+    setProblemType(nextType);
+    setValues(nextValues);
+    const nextResult = solve(nextType, nextValues);
+    setResult(nextResult);
+    if (saveToHistory && !isSolverError(nextResult)) {
+      void saveHistoryEntry(nextType, nextValues, nextResult);
+    }
+  }, [saveToHistory]);
 
   const handleCalculate = useCallback(
     (e: React.FormEvent) => {
@@ -149,7 +165,7 @@ export function SolverPage() {
             </form>
           </Card>
 
-          <NaturalLanguagePanel />
+          <NaturalLanguagePanel onParsed={handleNaturalLanguage} />
         </div>
 
         <div className="min-w-0">
