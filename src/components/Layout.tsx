@@ -12,7 +12,7 @@ const NAV_ITEMS = [
 ] as const;
 
 export function Layout() {
-  const { user, signOut } = useAuth();
+  const { signOut } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
