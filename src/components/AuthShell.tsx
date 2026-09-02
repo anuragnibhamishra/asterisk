@@ -8,7 +8,7 @@ interface AuthShellProps {
 
 export function AuthShell({ title, subtitle, children, footer }: AuthShellProps) {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-transparent min-w-screen px-4 text-text">
+    <main className="flex min-h-screen items-center justify-center bg-transparent w-full px-4 text-text">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <h1 className="text-2xl font-semibold">{title}</h1>

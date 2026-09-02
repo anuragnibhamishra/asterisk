@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import type { ProblemType, SolverResponse } from '../types';
 import { isSolverError } from '../types';
 import { solve } from '../math';
@@ -8,11 +9,14 @@ import { Card } from '../components/Card';
 import { Input } from '../components/Input';
 import { NaturalLanguagePanel } from '../components/NaturalLanguagePanel';
 import { SolverResult } from '../components/SolverResult';
+import { saveHistoryEntry } from '@/lib/history';
 
 export function SolverPage() {
+  const location = useLocation();
   const [problemType, setProblemType] = useState<ProblemType>('factorial');
   const [values, setValues] = useState<Record<string, string>>({});
   const [result, setResult] = useState<SolverResponse | null>(null);
+  const [saveToHistory, setSaveToHistory] = useState(true);
 
   const config = getProblemTypeConfig(problemType);
 
@@ -32,9 +36,14 @@ export function SolverPage() {
       e.preventDefault();
       const response = solve(problemType, values);
       setResult(response);
+      if (saveToHistory && !isSolverError(response)) {
+        void saveHistoryEntry(problemType, values, response);
+      }
     },
-    [problemType, values],
+    [problemType, saveToHistory, values],
   );
+
+  const reopenedResult = location.state?.historyResult as SolverResponse | undefined;
 
   const errorMessage = result && isSolverError(result) ? result.message : null;
   const successResult = result && !isSolverError(result) ? result : null;
@@ -128,6 +137,15 @@ export function SolverPage() {
               <Button type="submit" className="w-full sm:w-auto">
                 Calculate
               </Button>
+              <label className="flex items-center gap-2 text-sm text-text-muted">
+                <input
+                  type="checkbox"
+                  checked={saveToHistory}
+                  onChange={(event) => setSaveToHistory(event.target.checked)}
+                  className="accent-primary"
+                />
+                Save this calculation to history
+              </label>
             </form>
           </Card>
 
@@ -149,7 +167,11 @@ export function SolverPage() {
                 Choose a problem type and enter valid parameters to see the solution.
               </p>
             )}
-            {successResult && <SolverResult result={successResult} />}
+            {(successResult ?? (reopenedResult && !isSolverError(reopenedResult) ? reopenedResult : null)) && (
+              <SolverResult
+                result={successResult ?? (reopenedResult as Exclude<SolverResponse, { message: string }>)}
+              />
+            )}
           </Card>
         </div>
       </div>

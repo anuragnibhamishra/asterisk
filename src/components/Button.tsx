@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'logOut';
   children: ReactNode;
 }
 
@@ -11,6 +11,7 @@ const VARIANT_CLASSES = {
   secondary:
     'border border-surface-border bg-surface-raised text-text hover:border-primary/50 hover:bg-primary/5',
   ghost: 'text-text-muted hover:bg-surface-raised hover:text-text',
+  logOut: "block rounded-md px-3 py-2 text-sm font-medium transition-colors text-red-500 hover:bg-red-500/10 hover:text-red-500",
 } as const;
 
 export function Button({
@@ -22,7 +23,7 @@ export function Button({
   return (
     <button
       className={[
-        'inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
+        'inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
         VARIANT_CLASSES[variant],
         className,
       ].join(' ')}

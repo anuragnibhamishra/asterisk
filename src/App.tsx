@@ -8,6 +8,8 @@ import { SolverPage } from './pages/SolverPage';
 import { FormulasPage } from './pages/FormulasPage';
 import { ExamplesPage } from './pages/ExamplesPage';
 import { AboutPage } from './pages/AboutPage';
+import { PascalTrianglePage } from './pages/PascalTrianglePage';
+import { HistoryPage } from './pages/HistoryPage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
@@ -28,6 +30,8 @@ export default function App() {
           <Route path="formulas" element={<FormulasPage />} />
           <Route path="examples" element={<ExamplesPage />} />
           <Route path="about" element={<AboutPage />} />
+          <Route path="pascal-triangle" element={<PascalTrianglePage />} />
+          <Route path="history" element={<HistoryPage />} />
         </Route>
       </Route>
 
